@@ -1,23 +1,12 @@
-# Defend your stack's carbon story
+# LAB | Defend your stack's carbon story
 
-**Track:** Module 7 — Green tech · **When:** Week 8, Day 1 · **Status:** Required
+**Path B, green retrofit audit** of my Project 3, the *Application Prep Agent* (n8n + GPT-4o-mini). Project repo: [nmarseu/Project-3-Marseu](https://github.com/nmarseu/Project-3-Marseu).
 
-This repository contains everything you need for this lab.
+**Reviewer entry point: [`lab_proof.md`](lab_proof.md)**
 
-## Files
-
-- [`instructions.md`](./instructions.md) — the lab instructions
-- [`rubric.md`](./rubric.md) — how your submission is graded; this is what the AI reviewer checks your PR against
-
-## How to complete this lab
-
-1. **Fork** this repository.
-2. Do the work described in `instructions.md`, committing to your fork.
-3. Open a **pull request** back into this repository.
-4. You'll receive **AI feedback** on your PR based on `rubric.md`. Address any blocking feedback and push updates to the same PR.
-
-## Submission hygiene
-
-- Keep this repository scoped to this lab only — no unrelated projects or personal files.
-- Use clear, descriptive filenames.
-- Remove secrets, API keys, and tokens before committing.
+| File | What it is |
+|---|---|
+| [`lab_proof.md`](lab_proof.md) | Entry point: workflow audited, input, evidence, output, limitation, checklist |
+| [`application_prep_agent_green_retrofit_deck.pptx`](application_prep_agent_green_retrofit_deck.pptx) | The deck: 13 content slides + title, with speaker notes |
+| [`application_prep_agent_green_retrofit_deck.pdf`](application_prep_agent_green_retrofit_deck.pdf) | PDF export of the deck |
+| [`retrofit_audit_application_prep_agent.md`](retrofit_audit_application_prep_agent.md) | Path B retrofit audit template, filled in |
