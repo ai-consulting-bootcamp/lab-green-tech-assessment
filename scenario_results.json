@@ -1,0 +1,55 @@
+{
+  "evidence_type": "synthetic arithmetic, not an observed deployment result",
+  "requests": 1000,
+  "assumed_successful_resolutions": 800,
+  "baseline": {
+    "expected_model_calls": 2000,
+    "calls_per_successful_resolution": 2.5,
+    "call_reduction_percent_vs_baseline": 0.0
+  },
+  "cache_only": {
+    "expected_model_calls": 1400.0,
+    "calls_per_successful_resolution": 1.75,
+    "call_reduction_percent_vs_baseline": 30.0
+  },
+  "cache_and_routing": {
+    "expected_model_calls": 605.0,
+    "calls_per_successful_resolution": 0.75625,
+    "call_reduction_percent_vs_baseline": 69.75
+  },
+  "routing_breakdown": {
+    "cache_requests": 300.0,
+    "deterministic_requests": 150.0,
+    "small_model_calls": 550.0,
+    "additional_large_model_calls": 55.0
+  },
+  "energy_kwh": null,
+  "carbon_gco2e": null,
+  "sci_gco2e_per_resolution": null,
+  "limitations": [
+    "Resolution count and quality are assumptions, not test results.",
+    "Calls differ in model, tokens and energy; call reduction is not carbon reduction.",
+    "Cache, retrieval, rules, logging and infrastructure still consume resources.",
+    "Fallback is included; network retries and multi-turn conversations are not modeled."
+  ],
+  "sensitivity": [
+    {
+      "cache_share": 0.1,
+      "expected_model_calls": 825.0,
+      "calls_per_successful_resolution": 1.03125,
+      "call_reduction_percent_vs_baseline": 58.75
+    },
+    {
+      "cache_share": 0.3,
+      "expected_model_calls": 605.0,
+      "calls_per_successful_resolution": 0.75625,
+      "call_reduction_percent_vs_baseline": 69.75
+    },
+    {
+      "cache_share": 0.5,
+      "expected_model_calls": 385.0,
+      "calls_per_successful_resolution": 0.48125,
+      "call_reduction_percent_vs_baseline": 80.75
+    }
+  ]
+}
