@@ -8,6 +8,9 @@ This repository contains everything you need for this lab.
 
 - [`instructions.md`](./instructions.md) — the lab instructions
 - [`rubric.md`](./rubric.md) — how your submission is graded; this is what the AI reviewer checks your PR against
+- [`green-retrofit-audit-ai-search-visibility-agent-barsha.pptx`](./green-retrofit-audit-ai-search-visibility-agent-barsha.pptx) — Path B green retrofit audit deck of my Project 3 (AI Search Visibility Agent), with speaker notes
+- [`green-retrofit-audit-ai-search-visibility-agent-barsha.pdf`](./green-retrofit-audit-ai-search-visibility-agent-barsha.pdf) — PDF export of the same deck
+- [`green-retrofit-audit-notes-ai-search-visibility-agent-barsha.md`](./green-retrofit-audit-notes-ai-search-visibility-agent-barsha.md) — audit notes: retrofit audit template with call counts, lever table, measurement plan and caveats
 
 ## How to complete this lab
 
