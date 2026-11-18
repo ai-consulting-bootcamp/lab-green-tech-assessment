@@ -1,23 +1,21 @@
-# Defend your stack's carbon story
+# Green AI Assessment — Path A
 
-**Track:** Module 7 — Green tech · **When:** Week 8, Day 1 · **Status:** Required
+## Project Overview
 
-This repository contains everything you need for this lab.
+This lab presents a forward-looking green technology assessment of a fictional AI-powered customer support chatbot for an EU-based retailer.
+
+The assessment identifies potential environmental hotspots, evaluates the system against the four Green Software Foundation (GSF) pillars, and proposes practical improvements to reduce unnecessary computing, energy consumption, and operational costs.
+
+The presentation includes a title slide and 13 content slides, covering the required assessment, proposed solutions, measurement plan, limitations, and three-row lever table.
 
 ## Files
 
-- [`instructions.md`](./instructions.md) — the lab instructions
-- [`rubric.md`](./rubric.md) — how your submission is graded; this is what the AI reviewer checks your PR against
+- `Green_AI_Carbon_Story1.pdf` — Main presentation containing the assessment and proposed sustainability improvements.
+- `lab_proof.md` — Lab evidence, assessment assumptions, final output, and limitations.
+- `README.md` — Project overview and description of the submitted files.
 
-## How to complete this lab
+## Assessment Scope
 
-1. **Fork** this repository.
-2. Do the work described in `instructions.md`, committing to your fork.
-3. Open a **pull request** back into this repository.
-4. You'll receive **AI feedback** on your PR based on `rubric.md`. Address any blocking feedback and push updates to the same PR.
+The system is hypothetical. No real API calls, emissions measurements, or customer records were used.
 
-## Submission hygiene
-
-- Keep this repository scoped to this lab only — no unrelated projects or personal files.
-- Use clear, descriptive filenames.
-- Remove secrets, API keys, and tokens before committing.
+All estimated improvements are presented as hypotheses that would require validation through actual system measurements.
