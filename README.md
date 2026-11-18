@@ -21,3 +21,14 @@ This repository contains everything you need for this lab.
 - Keep this repository scoped to this lab only — no unrelated projects or personal files.
 - Use clear, descriptive filenames.
 - Remove secrets, API keys, and tokens before committing.
+
+# Defend your stack's carbon story – Path B (retrofit audit)
+
+**Author:** Elif Yurdakul · **Artefact audited:** Unioptt Programme Research Agent (Project 3)
+
+| File | Contents |
+|---|---|
+| `lab_proof.md` | Entry point: 50-word description, unit of value, retrofit audit template, checklist, limitation |
+| `green_retrofit_audit_unioptt_research_agent.pptx` | Slide deck (13 content slides + title), speaker notes on each slide |
+| `green_retrofit_audit_unioptt_research_agent.pdf` | PDF export of the deck |
+| `README.md` | This file map |
