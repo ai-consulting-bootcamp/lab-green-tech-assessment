@@ -8,6 +8,9 @@ This repository contains everything you need for this lab.
 
 - [`instructions.md`](./instructions.md) — the lab instructions
 - [`rubric.md`](./rubric.md) — how your submission is graded; this is what the AI reviewer checks your PR against
+- [`ai-use-case-identifier-green-retrofit-en.pptx`](./ai-use-case-identifier-green-retrofit-en.pptx) — English Path B presentation for AI consultants, with sources in the speaker notes
+- [`ai-use-case-identifier-architecture.md`](./ai-use-case-identifier-architecture.md) — architecture of the existing project under review
+- [`retrofit-audit-notes.md`](./retrofit-audit-notes.md) — audit rationale, proposed changes, assumptions, and measurement plan
 
 ## How to complete this lab
 
