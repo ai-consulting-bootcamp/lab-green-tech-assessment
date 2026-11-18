@@ -1,23 +1,31 @@
 # Defend your stack's carbon story
 
-**Track:** Module 7 — Green tech · **When:** Week 8, Day 1 · **Status:** Required
+**Path A: Northstar Home AI support assistant — fictional scenario.**
 
-This repository contains everything you need for this lab.
+Start with [lab_proof.md](lab_proof.md), then review the [slide deck](northstar_support_carbon_assessment.pptx). The deck contains one title slide and 13 content slides. All workload numbers are labelled planning assumptions; no production energy measurement or numerical carbon saving is claimed.
 
-## Files
+## File map
 
-- [`instructions.md`](./instructions.md) — the lab instructions
-- [`rubric.md`](./rubric.md) — how your submission is graded; this is what the AI reviewer checks your PR against
+| File | Purpose |
+|---|---|
+| [README.md](README.md) | Repository navigation and submission status |
+| [rubric.md](rubric.md) | Original grading rubric, preserved and ungraded |
+| [lab_proof.md](lab_proof.md) | Reviewer entry point, executed example, failure and requirement crosswalk |
+| [northstar_support_carbon_assessment.pptx](northstar_support_carbon_assessment.pptx) | Final editable slide deliverable with detailed speaker notes |
+| [lever_table.md](lever_table.md) | Three-row kickoff table, four interventions, measurement protocol and ownership |
+| [scenario_analysis.py](scenario_analysis.py) | Reproducible call-count arithmetic; Python standard library only |
+| [scenario_inputs.json](scenario_inputs.json) | Explicit synthetic planning assumptions |
+| [scenario_results.json](scenario_results.json) | Output from the executed calculation, including sensitivity |
 
-## How to complete this lab
+## Reproduce the evidence
 
-1. **Fork** this repository.
-2. Do the work described in `instructions.md`, committing to your fork.
-3. Open a **pull request** back into this repository.
-4. You'll receive **AI feedback** on your PR based on `rubric.md`. Address any blocking feedback and push updates to the same PR.
+```console
+python scenario_analysis.py --input scenario_inputs.json --output scenario_results.json
+python scenario_analysis.py --resolved 0
+```
 
-## Submission hygiene
+The second command is expected to fail: a per-resolution metric cannot use zero successful resolutions. No API key, network connection or third-party Python package is required.
 
-- Keep this repository scoped to this lab only — no unrelated projects or personal files.
-- Use clear, descriptive filenames.
-- Remove secrets, API keys, and tokens before committing.
+## Submission status
+
+Files are prepared locally for review. No commit, push or pull request is authorized by this README. After the user's approval, the course submission uses this GitHub repository and the upstream PR review workflow described in [instructions.md](instructions.md). Course source archives and unrelated projects are deliberately not included.
