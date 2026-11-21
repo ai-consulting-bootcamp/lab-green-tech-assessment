@@ -1,23 +1,50 @@
-# Defend your stack's carbon story
+# CompanyScope | Defend Your Stack's Carbon Story
 
-**Track:** Module 7 — Green tech · **When:** Week 8, Day 1 · **Status:** Required
+**Ironhack — Green Software & Sustainable AI lab**
+**Path B: Green retrofit audit**
+**Audience:** CTO / product owner
+**Prepared:** 21 November 2026
 
-This repository contains everything you need for this lab.
+> **Reviewer: start with [`lab_proof.md`](lab_proof.md).**
 
-## Files
+This repository contains a 15-slide presentation (**title + 14 content slides**) that defends a green-software assessment of a previous bootcamp artifact, [CompanyScope](https://github.com/sean173-lang/CompanyScope). The assessment links a functional unit **R** to four Green Software Foundation pillars — carbon, energy, hardware, and measurement — and recommends practical optimizations with explicit quality constraints.
 
-- [`instructions.md`](./instructions.md) — the lab instructions
-- [`rubric.md`](./rubric.md) — how your submission is graded; this is what the AI reviewer checks your PR against
+## File map
 
-## How to complete this lab
+| File | Purpose |
+| --- | --- |
+| [`lab_proof.md`](lab_proof.md) | **Reviewer entry point:** path, past artifact, reproducible run, input, observed demo output, final deck, limitation |
+| [`CompanyScope_Green_Retrofit_Audit.pptx`](CompanyScope_Green_Retrofit_Audit.pptx) | Editable slide deck; title + 14 content slides |
+| [`CompanyScope_Green_Retrofit_Audit.pdf`](CompanyScope_Green_Retrofit_Audit.pdf) | Portable export of the same deck |
+| [`audit_notes.md`](audit_notes.md) | Retrofit audit template, prioritization, assumptions, measurement plan and traceability |
+| [`audit_proxy.py`](audit_proxy.py) | Zero-dependency Python script for per-report workload proxy summaries |
+| [`sample_events.csv`](sample_events.csv) | **Synthetic** eight-report baseline/proposal example (not real CompanyScope telemetry) |
+| [`demo_summary.json`](demo_summary.json) | Reproducible output of `audit_proxy.py` on the synthetic input |
 
-1. **Fork** this repository.
-2. Do the work described in `instructions.md`, committing to your fork.
-3. Open a **pull request** back into this repository.
-4. You'll receive **AI feedback** on your PR based on `rubric.md`. Address any blocking feedback and push updates to the same PR.
+## Reproduce the hands-on example
 
-## Submission hygiene
+```bash
+python3 audit_proxy.py sample_events.csv --output demo_summary.json
+```
 
-- Keep this repository scoped to this lab only — no unrelated projects or personal files.
-- Use clear, descriptive filenames.
-- Remove secrets, API keys, and tokens before committing.
+The demo compares **model calls, external API calls, tokens and average latency per completed report**. It does **not** measure electricity consumption or greenhouse gas emissions. The numbers are expressly hypothetical, for illustrating a proposed A/B test; do not report them as real savings.
+
+## The claim and its limitation
+
+**R = one completed, evidence-checked company research report delivered to a user.**
+
+The assessment recommends (1) extend caching, (2) gate and right-size LLM calls, (3) slim prompts and evidence transfer, and (4) reduce idle capacity and retained data. Each suggestion is mapped to at least one GSF pillar and a business or quality outcome.
+
+CompanyScope source architecture is drawn from the prior project context (n8n, OpenRegister, Tavily, local RAG, GPT-4o-mini, validation and HTML/Markdown reports). No production run logs or provider electricity/embodied-carbon data were available for this lab, so **no verified SCI score or CO₂e reduction is claimed**.
+
+## Sources
+
+- [GSF Software Carbon Intensity (SCI) specification](https://sci.greensoftware.foundation/)
+- [GSF: Optimize agent orchestration to reduce unnecessary model calls](https://patterns.greensoftware.foundation/development/optimize-agent-orchestration-reduce-model-calls/)
+- [GSF: Use right-sized and energy-efficient AI models](https://patterns.greensoftware.foundation/catalog/ai/compress-ml-models-for-inference/)
+- [GSF: Cache static data](https://patterns.greensoftware.foundation/catalog/cloud/cache-static-data/)
+- [GSF Green Software Patterns — Software Engineer](https://patterns.greensoftware.foundation/personas/software-engineer/)
+
+## Submission
+
+Push **this lab folder's files only** to your dedicated lab repository and submit its URL. No credentials or production data are included.

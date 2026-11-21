@@ -1,0 +1,36 @@
+{
+  "baseline": {
+    "completed_reports_R": 8,
+    "external_api_calls_per_R": 4.25,
+    "latency_ms_per_R_mean": 14937.5,
+    "model_calls_per_R": 2.0,
+    "tokens_per_R": 3867.5,
+    "totals": {
+      "external_api_calls": 34.0,
+      "input_tokens": 25450.0,
+      "latency_ms": 119500.0,
+      "model_calls": 16.0,
+      "output_tokens": 5490.0
+    }
+  },
+  "proposed": {
+    "completed_reports_R": 8,
+    "external_api_calls_per_R": 2.625,
+    "latency_ms_per_R_mean": 10012.5,
+    "model_calls_per_R": 1.25,
+    "tokens_per_R": 2470.0,
+    "totals": {
+      "external_api_calls": 21.0,
+      "input_tokens": 16270.0,
+      "latency_ms": 80100.0,
+      "model_calls": 10.0,
+      "output_tokens": 3490.0
+    }
+  },
+  "scenario_comparison_percent": {
+    "external_api_calls_per_R": -38.2,
+    "latency_ms_per_R_mean": -33.0,
+    "model_calls_per_R": -37.5,
+    "tokens_per_R": -36.1
+  }
+}
