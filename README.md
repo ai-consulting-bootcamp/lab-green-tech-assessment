@@ -1,23 +1,26 @@
-# Defend your stack's carbon story
+# LAB | Defend your stack's carbon story
 
-**Track:** Module 7 — Green tech · **When:** Week 8, Day 1 · **Status:** Required
+Ironhack AI Consulting & Integration, Week 7. **Path B: green retrofit audit** of my Project 3 "RCSA Evidence & Challenge Agent" (LangGraph + OpenAI): https://github.com/muratcomez1/AI-assisted-RCSA
 
-This repository contains everything you need for this lab.
+**Start here:** [lab_proof.md](lab_proof.md)
 
 ## Files
 
-- [`instructions.md`](./instructions.md) — the lab instructions
-- [`rubric.md`](./rubric.md) — how your submission is graded; this is what the AI reviewer checks your PR against
+| File | Purpose |
+|---|---|
+| `lab_proof.md` | Entry point for the reviewer: run, evidence, output, limitation |
+| `rcsa_agent_carbon_story_path_b.pptx` | Slide deck (title + 14 content slides, speaker notes included) |
+| `rcsa_agent_carbon_story_path_b.pdf` | PDF export of the deck |
+| `retrofit_audit_template.md` | Completed Path B retrofit audit template |
+| `carbon_evidence.py` | Reads the Project 3 run logs, measures real prompt sizes, builds the before/after per R |
+| `carbon_evidence_output.txt` | Output of one run of the script |
+| `README.md` | This file map |
 
-## How to complete this lab
+## Run
 
-1. **Fork** this repository.
-2. Do the work described in `instructions.md`, committing to your fork.
-3. Open a **pull request** back into this repository.
-4. You'll receive **AI feedback** on your PR based on `rubric.md`. Address any blocking feedback and push updates to the same PR.
+```bash
+git clone https://github.com/muratcomez1/AI-assisted-RCSA ../AI-assisted-RCSA
+python3 carbon_evidence.py --repo ../AI-assisted-RCSA
+```
 
-## Submission hygiene
-
-- Keep this repository scoped to this lab only — no unrelated projects or personal files.
-- Use clear, descriptive filenames.
-- Remove secrets, API keys, and tokens before committing.
+Python standard library only. It imports the Project 3 code but makes no API calls.

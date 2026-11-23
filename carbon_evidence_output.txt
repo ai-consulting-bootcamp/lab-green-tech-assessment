@@ -1,0 +1,29 @@
+=== PART 1: real run logs from Project 3 (outputs/reports) ===
+  run logs found                         16
+  runs reaching llm_challenge            15
+  pairs sent to llm_challenge            105
+  challenges written by the LLM          42
+  LLM attempts in total                  154
+  LLM attempts that failed               112  (73% of all attempts)
+    401 AuthenticationError (pairs)      28
+    403 PermissionDeniedError (pairs)    21
+    400 BadRequestError (pairs)          7
+  retries on errors that cannot succeed  56
+  external API attempts that failed      15  (runs with HTTP 429: 5)
+  models in successful runs              {'gpt-4o-mini': 1, 'gpt-6-luna': 5}
+
+=== PART 2: real prompt size per llm_challenge call (Payment Processing) ===
+  pairs in R                             7
+  review priority                        {'medium': 5, 'high': 1, 'low': 1}
+  system prompt                          1080 chars  (~270 tokens), re-sent every call
+  pair evidence + guidance (avg)         2153 chars  (~538 tokens)
+  6 external items (avg)                 2533 chars  (~633 tokens), identical for every pair
+
+=== PART 3: before/after hypothesis per R (estimate) ===
+                                            before     after   change
+  LLM calls (happy path)                         7         1     -86%
+  input tokens                              10,090     4,133     -59%
+  output tokens                              1,750     1,500     -14%
+  total tokens                              11,840     5,633     -52%
+  LLM calls when the key is wrong               14         1     -93%
+  NOTE: hypothesis from real code + real logs; tokens are approximate (chars/4) and are a proxy for energy, not energy.
