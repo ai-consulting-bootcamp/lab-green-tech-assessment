@@ -25,10 +25,10 @@ Companion to the deck [`green-retrofit-audit-vela-support-bot.pdf`](./green-retr
 - **H2 Idle polling.** The widget polls `GET /webhook/support-replies` every 5 s for 30 min after every visitor message. It does this whether or not anything was escalated, and it doesn't stop when the reply arrives. That is up to 360 n8n executions per conversation.
 - **H3 Repeated work.** The same FAQ questions are embedded, searched, reranked and answered from scratch each time.
 - **H4 Stored waste.** Every execution is saved until n8n prunes it, Pinecone holds duplicate chunks for one page from early test runs, and escalation rows never expire.
-- Minor: two Notion triggers poll hourly (48 calls/day, almost always empty). Re-embedding only runs on page edits.
+- Minor: two Notion triggers poll hourly (48 calls/day, almost always empty). Every minute was only for testing, and daily is enough for a help centre. Re-embedding only runs on page edits.
 
 **Green opportunities (prioritized):**
-1. **Quick win: S1.** Poll only after an escalation, stop on the reply, back off 5 → 15 → 30 s. Pillars: energy, hardware. Pattern: [Keep request counts low](https://patterns.greensoftware.foundation/development/web-performance/keep-request-counts-low).
+1. **Quick win: S1.** Poll only after an escalation, stop on the reply, back off 5 → 15 → 30 s. Server-side, switch the Notion triggers from hourly to daily (48 → 2 checks a day). Pillars: energy, hardware. Pattern: [Keep request counts low](https://patterns.greensoftware.foundation/development/web-performance/keep-request-counts-low).
 2. **Quick win: S4.** Don't save successful poll executions (keep counters instead), use deterministic chunk ids, purge duplicates, expire delivered escalations after 30 days. Pillars: hardware, measurement. Patterns: [Delete or auto-expire unused storage](https://patterns.greensoftware.foundation/operations/resource-lifecycle/delete-or-auto-expire-unused-storage), [Remove unused assets](https://patterns.greensoftware.foundation/operations/resource-lifecycle/remove-unused-assets).
 3. **Medium, the biggest energy lever: S3.** Retrieve first and then make one LLM call, send the top 3 reranked chunks, skip retrieval on "yes/thanks" turns, and keep `gpt-5.4-mini` with any smaller model gated by a golden set. Pillars: energy, hardware, carbon. Patterns: [Optimize agent orchestration to reduce unnecessary model calls](https://patterns.greensoftware.foundation/development/optimize-agent-orchestration-reduce-model-calls), [Use right-sized and energy-efficient AI models](https://patterns.greensoftware.foundation/development/right-sized-energy-efficient-ai-models).
 4. **Medium: S2.** Cache answers for repeated FAQ questions, invalidated by the Notion update trigger. Pillars: energy, carbon. Pattern: [Cache static data](https://patterns.greensoftware.foundation/development/data-handling/cache-static-data).
@@ -37,7 +37,7 @@ Companion to the deck [`green-retrofit-audit-vela-support-bot.pdf`](./green-retr
 **What I would measure to prove improvement:** per R (one resolved support conversation): n8n executions, LLM calls, input/output tokens, € cost across OpenAI + Cohere + Pinecone, and polls that returned nothing. Guardrails: golden-set correctness (30 questions), escalation rate, p95 latency. Week 1 is the baseline, week 2 runs with S1 + S4 and a first cut of S3. Full plan on deck slide 12.
 
 **Risks / tradeoffs:**
-- Backoff polling delays a human reply by up to 30 s.
+- Backoff polling delays a human reply by up to 30 s. Daily Notion polling means a doc edit can take up to a day to reach the bot (run the workflow by hand for urgent fixes).
 - Less context and fewer calls can make answers worse, so the golden set gates every change.
 - A cache can serve stale answers if invalidation misses a page edit.
 - Dropping execution logs makes debugging harder, so counters replace them.
@@ -50,11 +50,11 @@ Companion to the deck [`green-retrofit-audit-vela-support-bot.pdf`](./green-retr
 | Poll every 5 s for 30 min, after every message, never stops on reply | `support-bot/index.html`: `POLL_EVERY_MS = 5000`, `POLL_MAX_MS = 30 * 60 * 1000`, `startPolling()` in the submit handler's `finally`. `pollOnce()` never clears the timer |
 | 360 polls in the tail | 12 polls/min × 30 min, only while the tab is visible (`document.hidden` check) |
 | Model, retrieval, rerank, memory | Live n8n config, read 26 Nov 2026: `OpenAI Chat Model` = `gpt-5.4-mini`, `Retrieve from Pinecone` mode `retrieve-as-tool`, `topK: 5`, `useReranker: true` (Cohere), `Simple Memory` = buffer window (default size), embeddings 512 dims, text splitter default chunk size with 100 overlap |
-| Notion polling | Both Notion triggers set to `everyHour` (the week-5 proof said "every minute", which has since changed) |
+| Notion polling | Both Notion triggers set to `everyHour`. "Every minute" in the week-5 proof was a testing setting; daily is proposed in S1 |
 | Trace #2204 timings | `lab_proof.md` sections 4 and 6: row created 11:45:07, Save Reply 11:45:50, `delivered` flipped 11:45:54 |
 | Only 1 execution retained | n8n executions list for the workflow on 26 Nov 2026 returned a single execution (#3875, Notion trigger DNS error, 15 Nov). Everything else had been pruned |
 | Duplicate chunks | Known leftover noted in `lab_proof.md` section 2b |
-| Pinecone region "likely us-east-1" | Assumption: Starter-plan default. **Not verified**, so check in the Pinecone console |
+| Pinecone region us-east-1 | The index is on Pinecone's free Starter tier, which only runs on AWS us-east-1. Moving to an EU region needs a paid plan |
 
 Numbers on slides 7 and 13 are **hypotheses** from these sources, not measurements. Assumptions behind them: 3 visitor turns per conversation, 15% escalation rate, a tab left visible for the whole 30-minute tail (worst case).
 
@@ -64,7 +64,7 @@ Numbers on slides 7 and 13 are **hypotheses** from these sources, not measuremen
 | ----- | ------------------------------ | ------------------------------ |
 | Model / size | `gpt-5.4-mini` as an agent, ≥2 calls per searched turn, 5 chunks + memory each call | Retrieve first, then one call with the top 3 chunks. A smaller model only for routing, and only if it passes the golden set |
 | Call pattern (batch, cache, sync) | Synchronous, no cache. The widget polls every 5 s for 30 min after every message | Cache repeated FAQ answers. Poll only after escalation, with backoff, and stop on reply (later: push) |
-| Infra / region / retention | Pinecone likely us-east-1, n8n region unknown. All executions saved, duplicate vectors, escalations kept forever | One low-carbon EU region close to users. Counters instead of poll logs. Deterministic chunk ids. 30-day expiry |
+| Infra / region / retention | Pinecone on us-east-1 (free tier), n8n region unknown. All executions saved, duplicate vectors, escalations kept forever | One low-carbon EU region close to users. Counters instead of poll logs. Deterministic chunk ids. 30-day expiry |
 
 ## 5. Speaker notes
 
@@ -82,7 +82,7 @@ Numbers on slides 7 and 13 are **hypotheses** from these sources, not measuremen
 
 **6 Pillars map.** Energy is touched by everything. Measurement is the blocker: without per-R data, carbon stays a guess.
 
-**7 S1.** Cheapest fix, a few lines in the widget plus an `escalated` flag in the chat response. Say honestly that a poll is cheap, so this is mainly about quota, cost and noise.
+**7 S1.** Cheapest fix, a few lines in the widget plus an `escalated` flag in the chat response. Same logic on the server: the Notion triggers drop from hourly to daily, because help pages rarely change. Say honestly that a poll is cheap, so this is mainly about quota, cost and noise.
 
 **8 S2.** Only build it if the baseline shows repetition. The quality guard is weekly grading of cache hits, and invalidation reuses the Notion update trigger we already have.
 
@@ -90,13 +90,13 @@ Numbers on slides 7 and 13 are **hypotheses** from these sources, not measuremen
 
 **10 S4.** Storage hygiene. The twist is that deleting logs must not destroy the evidence the measurement plan needs, so counters replace logs.
 
-**11 S5.** Region changes I for every call, but it's a migration, so it waits for the baseline. Time-shifting barely matters here because re-embedding is rare.
+**11 S5.** Region changes I for every call. Pinecone is on us-east-1 because of the free tier, so this costs a paid plan plus a migration, and it waits for the baseline. Time-shifting barely matters here because re-embedding is rare.
 
 **12 Measurement.** Compare per R, not per day. SCI is reported as a range with the boundary from slide 2. Success criteria and guardrails are fixed before the trial starts.
 
 **13 Before/after.** Worst-case executions drop by about 99%. LLM calls drop by about 40%. Both are hypotheses. The metric to watch daily for one week is executions per R and input tokens per R.
 
-**14 Caveats.** No carbon-neutral claim, no offsets presented as reductions, and polling is not the biggest energy item. Validate next: n8n region with Ironhack, Pinecone region in the console, OpenAI residency with the account owner. The ask: approve the 2-week trial.
+**14 Caveats.** No carbon-neutral claim, no offsets presented as reductions, and polling is not the biggest energy item. Validate next: n8n region with Ironhack, OpenAI residency with the account owner, and the cost of a paid Pinecone plan for an EU region. The ask: approve the 2-week trial.
 
 ## 6. Verify checklist
 

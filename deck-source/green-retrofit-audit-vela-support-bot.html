@@ -194,7 +194,7 @@
     <table>
       <tr><th style="width:170px;">Lever</th><th>Assumption</th><th style="width:150px;">Confidence</th></tr>
       <tr><td><b>Traffic</b></td><td>~100 conversations a day at launch, ~15% escalate, ~3 visitor turns per conversation. Today there is only demo traffic.</td><td><span class="conf guess">Guess</span></td></tr>
-      <tr><td><b>Region</b></td><td>Pinecone index likely on AWS us-east-1 (Starter plan default). The n8n host region is unknown (Ironhack-managed). We cannot pick the OpenAI/Cohere serving region on our plan.</td><td><span class="conf unknown">Unknown</span></td></tr>
+      <tr><td><b>Region</b></td><td>Pinecone runs on AWS us-east-1 (free Starter tier, which allows no other region). The n8n host region is unknown (Ironhack-managed). We cannot pick the OpenAI/Cohere serving region on our plan.</td><td><span class="conf unknown">Partly known</span></td></tr>
       <tr><td><b>Model / tokens</b></td><td><code>gpt-5.4-mini</code>. About 2–3k input tokens per answered turn: system prompt + 5 chunks (~1.2k, default 1,000-char chunks) + chat history.</td><td><span class="conf guess">Guess</span></td></tr>
       <tr><td><b>Call pattern</b></td><td>Synchronous, no cache. 2 LLM calls per searched turn, +1–2 for escalation tools: <b>~7 LLM calls per R</b>.</td><td><span class="conf guess">From config</span></td></tr>
       <tr><td><b>Retention</b></td><td>Every execution saved until pruned; duplicate chunks for one Notion page; escalation rows kept forever.</td><td><span class="conf known">Known</span></td></tr>
@@ -220,7 +220,7 @@
       </table>
     </div>
     <div class="col" style="display:flex; flex-direction:column; gap:12px;">
-      <div class="card" style="padding:14px 18px;"><span class="chip c">Carbon</span><p style="margin-top:6px; font-size:15px;">E × I. I depends on regions we have not confirmed: us-east-1 vs a low-carbon EU grid.</p></div>
+      <div class="card" style="padding:14px 18px;"><span class="chip c">Carbon</span><p style="margin-top:6px; font-size:15px;">E × I. Pinecone sits on us-east-1; the n8n and model regions are unknown. A low-carbon EU grid would lower I.</p></div>
       <div class="card" style="padding:14px 18px;"><span class="chip e">Energy</span><p style="margin-top:6px; font-size:15px;">Fewer and smaller calls per R. This is where most of the fixes land.</p></div>
       <div class="card" style="padding:14px 18px;"><span class="chip h">Hardware</span><p style="margin-top:6px; font-size:15px;">GPU time at the providers, n8n capacity sized for poll load, storage of duplicate vectors and logs.</p></div>
       <div class="card" style="padding:14px 18px;"><span class="chip m">Measurement</span><p style="margin-top:6px; font-size:15px;">No token or execution history is kept, so we cannot compute SCI today.</p></div>
@@ -238,14 +238,14 @@
     <div class="pcl">
       <div class="card"><h2>Problem <span class="hot" style="width:24px;height:24px;font-size:11px;vertical-align:middle;">H2</span></h2><p>The widget polls n8n every 5 s for 30 min after every message, even when nothing was escalated and after the reply has arrived.</p></div>
       <div class="arrow">→</div>
-      <div class="card"><h2>Change</h2><p>The chat response returns an <code>escalated</code> flag, and polling starts only then. Stop on the first reply. Back off 5 → 15 → 30 s. Later: push via a small Worker (SSE).</p></div>
+      <div class="card"><h2>Change</h2><p>The chat response returns an <code>escalated</code> flag, and polling starts only then. Stop on the first reply. Back off 5 → 15 → 30 s. Same idea server-side: Notion triggers hourly → daily (48 → 2 checks a day).</p></div>
       <div class="arrow">→</div>
       <div class="card"><h2>Expected effect</h2><p><b>Non-escalated R:</b> up to 360 → 0 polls.<br><b>Escalated R (like #2204):</b> up to&nbsp;~370&nbsp;→&nbsp;~6.<br>Business: fewer n8n executions against quota, cleaner logs.</p></div>
     </div>
     <div class="meta">
       <div style="flex:1;"><div class="lbl">Pillars</div><span class="chip e">Energy</span><span class="chip h">Hardware</span></div>
       <div style="flex:1.4;"><div class="lbl">GSF pattern</div><p><a href="https://patterns.greensoftware.foundation/development/web-performance/keep-request-counts-low">Keep request counts low</a></p></div>
-      <div style="flex:2;"><div class="lbl">Tradeoff, honestly</div><p>A human reply can show up to 30 s later. Each poll is cheap, so this mostly saves count and cost, not the biggest energy item.</p></div>
+      <div style="flex:2;"><div class="lbl">Tradeoff, honestly</div><p>A human reply can show up to 30 s later; a doc edit takes up to a day to reach the bot (run it by hand if urgent). Each poll is cheap, so this saves count and cost more than energy.</p></div>
     </div>
   </div>
   <div class="foot"><span>Path B · Green retrofit audit · Vela support bot</span><span>7</span></div>
@@ -328,11 +328,11 @@
   <h1>Run the workload where the grid is cleaner and the users are</h1>
   <div class="body" style="margin-top:24px;">
     <div class="pcl">
-      <div class="card"><h2>Problem</h2><p>We do not know I. Pinecone is probably in us-east-1 and the n8n host region is unknown, so EU visitors' requests may cross the Atlantic twice per turn.</p></div>
+      <div class="card"><h2>Problem</h2><p>Pinecone runs in us-east-1 (Virginia) because the free tier allows no other region. The n8n host region is unknown. EU visitors' requests cross the Atlantic on every turn.</p></div>
       <div class="arrow">→</div>
       <div class="card"><h2>Change</h2><p>Put n8n and Pinecone in one EU region, chosen with grid-intensity data (e.g. Electricity Maps), preferring a low-carbon grid where the provider offers it. Check OpenAI's EU data-residency options. Time-shift full re-embedding jobs to low-intensity hours.</p></div>
       <div class="arrow">→</div>
-      <div class="card"><h2>Why it is last</h2><p>It lowers I for every call, but it is a migration with plan and vendor limits. Re-embedding is rare, so time-shifting it saves little. Do it once the baseline shows E per R.</p></div>
+      <div class="card"><h2>Why it is last</h2><p>It lowers I for every call, but it needs a paid Pinecone plan and a migration. Re-embedding is rare, so time-shifting it saves little. Do it once the baseline shows E per R.</p></div>
     </div>
     <div class="meta">
       <div style="flex:1;"><div class="lbl">Pillars</div><span class="chip c">Carbon</span><span class="chip m">Measurement</span></div>
@@ -422,7 +422,7 @@
       <h2 style="color:#9FB7A8; font-size:14px; letter-spacing:1px; text-transform:uppercase;">Validate next, with whom</h2>
       <ul style="color:#D7E3DB; margin-top:8px;">
         <li>n8n host region and execution retention: Ironhack platform team</li>
-        <li>Pinecone index region: Pinecone console</li>
+        <li>Cost of a paid Pinecone plan for an EU region: Vela finance</li>
         <li>OpenAI EU residency and usage export: Vela account owner</li>
         <li>Real escalation rate and turns per R: week-1 baseline</li>
       </ul>
